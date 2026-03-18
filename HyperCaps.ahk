@@ -1,42 +1,33 @@
 ﻿#Requires AutoHotkey v2
 #SingleInstance Force
 
+ProcessSetPriority "High"
+
 SetCapsLockState "AlwaysOff"
+*CapsLock::Return 
 
 /* 
-| Shortcut                         | Output                           |
-| -------------------------------- | -------------------------------- |
-| CAPSLOCK + { i, j, k, l }        | { Up, Left, Down, Right }        |
-| CAPSLOCK + { u, o }              | { Home, End }                    |
-| CAPSLOCK + { y, ; }              | { Control+Left, Control+Right }  |
+| Shortcut                         | Output                             |
+| -------------------------------- | ---------------------------------- |
+| CAPSLOCK + { i, j, k, l }        | { Up, Left, Down, Right }          |
+| CAPSLOCK + { u, o }              | { Home, End }                      |
+| CAPSLOCK + { h, ; }              | Ctrl + { Left, Right } (Word Jump) |
 */
 
-CapsLock & i::Up
-CapsLock & j::Left
-CapsLock & k::Down
-CapsLock & l::Right
-CapsLock & u::Home
-CapsLock & o::End
-CapsLock & m::^Left
-CapsLock & .::^Right
+#HotIf GetKeyState("CapsLock", "P")
 
-CapsLock & h::
-{
-    Send "{Blind}{Control DownR}{Left DownR}"
-}
+; --- Arrow Keys ---
+*i::SendInput "{Blind}{Up}"
+*j::SendInput "{Blind}{Left}"
+*k::SendInput "{Blind}{Down}"
+*l::SendInput "{Blind}{Right}"
 
-CapsLock & h Up::
-{
-    Send "{Blind}{Control Up}{Left Up}"
-}
+; --- Ctrl + Arrow Keys (Word Jump) ---
+*h::SendInput "{Blind}^{Left}"
+*;::SendInput "{Blind}^{Right}"
 
-CapsLock & `;::
-{
-    Send "{Blind}{Control DownR}{Right DownR}"
-}
+; --- Home / End ---
+*u::SendInput "{Blind}{Home}"
+*o::SendInput "{Blind}{End}"
 
-CapsLock & `; Up::
-{
-    Send "{Blind}{Control Up}{Right Up}"
-}
-
+#HotIf
